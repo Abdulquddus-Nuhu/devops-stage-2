@@ -1,4 +1,5 @@
-# frontend/Dockerfile
+
+# Frontend Dockerfile
 FROM node:14-alpine AS build
 WORKDIR /app
 COPY package.json ./
@@ -7,10 +8,8 @@ RUN npm install
 COPY . ./
 RUN npm run build
 
-# Check if the build directory was created successfully
-RUN if [ ! -d "/app/build" ]; then echo "Build directory not found!"; exit 1; fi
-
+# Change the COPY command to use the 'dist' directory instead of 'build'
 FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
