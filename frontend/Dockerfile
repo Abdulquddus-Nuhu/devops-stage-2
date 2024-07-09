@@ -2,9 +2,13 @@
 FROM node:14-alpine AS build
 WORKDIR /app
 COPY package.json ./
+COPY package-lock.json ./
 RUN npm install
 COPY . ./
 RUN npm run build
+
+# Check if the build directory was created successfully
+RUN if [ ! -d "/app/build" ]; then echo "Build directory not found!"; exit 1; fi
 
 FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
