@@ -1,0 +1,22 @@
+# nginx/nginx.conf
+server {
+    listen 80;
+
+    server_name 162.0.222.79;
+
+    location / {
+        proxy_pass http://frontend:80;
+    }
+
+    location /api {
+        proxy_pass http://backend:8000;
+    }
+
+    location /docs {
+        proxy_pass http://backend:8000/docs;
+    }
+
+    location /redoc {
+        proxy_pass http://backend:8000/redoc;
+    }
+}
